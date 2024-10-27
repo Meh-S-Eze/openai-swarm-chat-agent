@@ -1,0 +1,67 @@
+# Panel Application Configuration
+
+# Server settings
+server:
+  port: 5007
+  host: "localhost"
+  websocket_origin: "*"
+  autoreload: true
+  show_on_start: true
+
+# Theme configuration
+theme:
+  design: "material"
+  mode: "default"
+  # Custom color overrides (optional)
+  colors:
+    primary: "#1976D2"
+    secondary: "#424242"
+    background: "#FFFFFF"
+
+# Chat interface settings
+chat:
+  # Message display settings
+  messages:
+    max_history: 100
+    timestamp_format: "%H:%M"
+    default_avatar:
+      user: "👤"
+      system: "ℹ️"
+      assistant: "🤖"
+      error: "⚠️"
+  
+  # Input settings
+  input:
+    placeholder: "Type a message..."
+    max_length: 1000
+    typing_indicator: true
+    
+  # Layout settings
+  layout:
+    max_width: "1200px"
+    message_spacing: "8px"
+    container_padding: "20px"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  file: "frontend/logs/panel.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+# Integration settings
+swarm:
+  # Connection settings for Swarm backend
+  timeout: 30
+  retry_attempts: 3
+  retry_delay: 1
+  
+  # Agent configuration
+  agents:
+    default_instructions: "You are a helpful assistant."
+    context_timeout: 300  # seconds
+    
+# Development settings
+development:
+  debug: false
+  profile: false
+  hot_reload: true

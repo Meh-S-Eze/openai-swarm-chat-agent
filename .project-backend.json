@@ -1,0 +1,185 @@
+{
+    "userInstructions": "Execute the following terminal commands in order:",
+    "terminalCommands": {
+      "prerequisites": [
+        "brew install pyenv",
+        "echo 'export PYENV_ROOT=\"$HOME/.pyenv\"' >> ~/.zshrc",
+        "echo 'command -v pyenv >/dev/null || export PATH=\"$PYENV_ROOT/bin:$PATH\"' >> ~/.zshrc",
+        "echo 'eval \"$(pyenv init -)\"' >> ~/.zshrc",
+        "source ~/.zshrc",
+        "pyenv install 3.10"
+      ],
+      "setup": [
+        "cd /Users/home/Documents/ainewagent",
+        "pyenv local 3.10",
+        "python -m venv venv",
+        "source venv/bin/activate",
+        "pip install --upgrade pip",
+        "pip install -e .",
+        "pip install qdrant-client openai panel"
+      ],
+      "environment": [
+        "echo \"OPENAI_API_KEY=your-key-here\" > .env",
+        "echo \"SWARM_CONFIG_PATH=./swarm/config.yaml\" >> .env",
+        "echo \"PANEL_PORT=5006\" >> .env"
+      ],
+      "run": [
+        "source venv/bin/activate",
+        "python examples/support_bot/customer_service.py"
+      ],
+      "test": [
+        "pytest tests/",
+        "black .",
+        "flake8 ."
+      ],
+      "git": [
+        "git init",
+        "git add .",
+        "git commit -m \"Initial commit\"",
+        "git remote add origin https://github.com/yourusername/swarm.git",
+        "git push -u origin main"
+      ],
+      "debug": [
+        "tail -f logs/swarm.log"
+      ]
+    },
+    "aiInstructions": {
+      "purpose": "Handle all implementation details, file creation, and code generation",
+      "userInteraction": "Only provide terminal commands for the user to execute",
+      "responsibility": "Manage all other aspects of development and implementation",
+      "prerequisites": "Ensure Python 3.10+ is installed via pyenv before proceeding with setup"
+    },
+    "dependencies": {
+      "python": ">=3.10",
+      "pyenv": "latest",
+      "swarm": "git+https://github.com/openai/swarm.git",
+      "openai": "^1.33.0",
+      "pytest": "^8.3.3",
+      "black": "^23.3.0",
+      "flake8": "^6.0.0",
+      "qdrant-client": "^1.12.0",
+      "panel": "^1.3.0"
+    },
+    "fileStructure": {
+      "root": {
+        "assets": {},
+        "examples": {
+          "basic": {},
+          "triage_agent": {},
+          "weather_agent": {},
+          "airline": {},
+          "support_bot": {},
+          "personal_shopper": {}
+        },
+        "logs": {},
+        "swarm": {},
+        "tests": {},
+        ".gitignore": "// ... existing entries",
+        ".pre-commit-config.yaml": "// ... existing configurations",
+        "LICENSE": "// ... license text",
+        "README.md": "// ... existing README content",
+        "SECURITY.md": "// ... security policies",
+        "pyproject.toml": "// ... project configurations",
+        "setup.cfg": "// ... setup configurations"
+      }
+    },
+    "environmentSetup": {
+      "variables": {
+        "OPENAI_API_KEY": "your-openai-api-key",
+        "SWARM_CONFIG_PATH": "./swarm/config.yaml"
+      },
+      "configuration": {
+        "python_version": "3.10+",
+        "virtual_env": "venv",
+        "editor": "Cursor IDE"
+      }
+    },
+    "buildSteps": [
+      {
+        "step": 1,
+        "description": "Clone the Swarm repository",
+        "command": "git clone https://github.com/openai/swarm.git"
+      },
+      {
+        "step": 2,
+        "description": "Navigate to the project directory",
+        "command": "cd swarm"
+      },
+      {
+        "step": 3,
+        "description": "Create a virtual environment",
+        "command": "python -m venv venv"
+      },
+      {
+        "step": 4,
+        "description": "Activate the virtual environment",
+        "command": "source venv/bin/activate"
+      },
+      {
+        "step": 5,
+        "description": "Install the required dependencies",
+        "command": "pip install --upgrade pip"
+      },
+      {
+        "step": 6,
+        "description": "Set up environment variables",
+        "instructions": "Create a `.env` file and add the necessary environment variables as specified in `environmentSetup`."
+      },
+      {
+        "step": 7,
+        "description": "Run initial setup scripts if any",
+        "command": "python setup.py install"
+      },
+      {
+        "step": 8,
+        "description": "Verify the installation by running an example",
+        "command": "python examples/basic/example.py"
+      }
+    ],
+    "testingStrategy": {
+      "unitTests": {
+        "framework": "pytest",
+        "command": "pytest tests/"
+      },
+      "linting": {
+        "tools": ["flake8", "black"],
+        "commands": ["flake8 .", "black ."]
+      },
+      "integrationTests": {
+        "description": "Test the interaction between different Swarm agents",
+        "command": "pytest tests/integration/"
+      },
+      "continuousIntegration": {
+        "tool": "GitHub Actions",
+        "configurationFile": ".github/workflows/ci.yml",
+        "steps": [
+          "Checkout code",
+          "Set up Python",
+          "Install dependencies",
+          "Run linting",
+          "Run tests"
+        ]
+      }
+    },
+    "debuggingNotes": {
+      "commonIssues": [
+        {
+          "issue": "Missing OPENAI_API_KEY",
+          "solution": "Ensure that the `OPENAI_API_KEY` environment variable is set correctly in the `.env` file."
+        },
+        {
+          "issue": "Dependency conflicts",
+          "solution": "Use a virtual environment to isolate dependencies and verify versions in `requirements.txt`."
+        },
+        {
+          "issue": "Failed installations",
+          "solution": "Check internet connectivity and ensure you have the necessary permissions to install packages."
+        },
+        {
+          "issue": "Runtime errors in agents",
+          "solution": "Enable debug mode by setting `debug=True` in the configuration and inspect the logs in the `logs` directory."
+        }
+      ],
+      "logging": "Logs are stored in the `logs/` directory. Use these logs to trace errors and monitor agent activities."
+    }
+}

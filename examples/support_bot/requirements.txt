@@ -1,0 +1,17 @@
+# Backend dependencies
+qdrant-client>=1.12.0
+openai>=1.33.0
+pytest>=8.3.3
+black>=23.3.0
+flake8>=6.0.0
+pre-commit
+python-dotenv>=1.0.0
+
+# Frontend dependencies
+panel>=1.3.0
+param>=2.0.0
+bokeh>=3.0.0
+markdown
+jinja2
+pytest-asyncio
+pytest-cov
