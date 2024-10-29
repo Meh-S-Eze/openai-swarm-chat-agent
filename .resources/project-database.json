@@ -1,0 +1,273 @@
+{
+    "userInstructions": "Execute the following terminal commands in order:",
+    "terminalCommands": {
+        "prerequisites": [
+            "brew tap surrealdb/tap",
+            "brew install surrealdb/tap/surreal"
+        ],
+        "setup": [
+            "mkdir -p database/data",
+            "surreal start --log debug --user root --pass root file://database/data/surreal.db"
+        ]
+    },
+    "surrealDBSchema": {
+        "namespaceAndDatabase": {
+            "definition": {
+                "namespace": "DEFINE NAMESPACE IF NOT EXISTS name",
+                "database": "DEFINE DATABASE IF NOT EXISTS name",
+                "usage": "USE NS name DB name"
+            },
+            "bestPractices": [
+                "Always use IF NOT EXISTS to prevent errors",
+                "Define namespace before database",
+                "Use consistent naming conventions"
+            ]
+        },
+        "tables": {
+            "definition": {
+                "basic": "DEFINE TABLE name",
+                "schemafull": "DEFINE TABLE name SCHEMAFULL",
+                "schemaless": "DEFINE TABLE name SCHEMALESS",
+                "dropIfExists": "DEFINE TABLE IF NOT EXISTS name"
+            },
+            "permissions": {
+                "syntax": "DEFINE TABLE name PERMISSIONS",
+                "options": [
+                    "FULL",
+                    "none",
+                    "for select",
+                    "for create",
+                    "for update",
+                    "for delete"
+                ]
+            }
+        },
+        "fields": {
+            "definition": {
+                "syntax": "DEFINE FIELD name ON table TYPE type",
+                "assertions": "ASSERT condition",
+                "defaults": "DEFAULT value",
+                "permissions": "PERMISSIONS for select, create..."
+            },
+            "types": {
+                "primitive": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "datetime",
+                    "duration",
+                    "object",
+                    "array"
+                ],
+                "complex": {
+                    "record": "record<table>",
+                    "array": "array<type>",
+                    "set": "set<type>",
+                    "geometry": "geometry",
+                    "custom": "Custom defined types"
+                }
+            },
+            "validation": {
+                "string": [
+                    "string::len($value) > 0",
+                    "string::is::email($value)",
+                    "string::matches($value, pattern)"
+                ],
+                "numeric": [
+                    "number > 0",
+                    "math::between($value, min, max)",
+                    "math::is::positive($value)"
+                ],
+                "datetime": [
+                    "time::now()",
+                    "time::after($value, timestamp)",
+                    "time::before($value, timestamp)"
+                ]
+            }
+        },
+        "indexes": {
+            "definition": {
+                "syntax": "DEFINE INDEX name ON table FIELDS field",
+                "options": {
+                    "unique": "UNIQUE",
+                    "fields": "Single or multiple fields",
+                    "types": ["btree", "mtree", "hash"]
+                }
+            },
+            "bestPractices": [
+                "Index frequently queried fields",
+                "Use unique indexes for identifiers",
+                "Consider index overhead"
+            ]
+        },
+        "relationships": {
+            "types": {
+                "oneToOne": "DEFINE FIELD single ON table TYPE record<other_table>",
+                "oneToMany": "DEFINE FIELD many ON table TYPE array<record<other_table>>",
+                "manyToMany": "Through junction tables or array fields"
+            },
+            "edges": {
+                "definition": "DEFINE TABLE relationship SCHEMALESS",
+                "connection": "->table->",
+                "direction": "IN / OUT relationships"
+            }
+        },
+        "events": {
+            "definition": "DEFINE EVENT name ON table WHEN condition THEN action",
+            "triggers": [
+                "CREATE",
+                "UPDATE",
+                "DELETE"
+            ],
+            "context": {
+                "$before": "Previous record state",
+                "$after": "New record state",
+                "$value": "Current value"
+            }
+        },
+        "functions": {
+            "definition": "DEFINE FUNCTION name($param: type) {...}",
+            "scopes": [
+                "Database functions",
+                "Table functions",
+                "Field functions"
+            ],
+            "bestPractices": [
+                "Use parameters for flexibility",
+                "Handle errors gracefully",
+                "Document function purpose"
+            ]
+        },
+        "scopes": {
+            "definition": "DEFINE SCOPE name SESSION duration",
+            "authentication": {
+                "signup": "Sign up configuration",
+                "signin": "Sign in configuration"
+            },
+            "tokens": {
+                "generation": "Token generation rules",
+                "validation": "Token validation rules"
+            }
+        },
+        "bestPractices": {
+            "schema": [
+                "Use SCHEMAFULL for strict data validation",
+                "Define clear field types and constraints",
+                "Implement proper indexing strategy",
+                "Use meaningful table and field names",
+                "Document schema design decisions"
+            ],
+            "relationships": [
+                "Choose appropriate relationship type",
+                "Consider query performance",
+                "Use meaningful relationship names",
+                "Implement proper foreign key constraints"
+            ],
+            "security": [
+                "Define proper table permissions",
+                "Implement field-level security",
+                "Use scopes for authentication",
+                "Validate user input"
+            ],
+            "performance": [
+                "Index frequently queried fields",
+                "Use appropriate field types",
+                "Optimize relationship queries",
+                "Monitor query performance"
+            ]
+        }
+    },
+    "dependencies": {
+        "required": {
+            "surrealdb": "^2.0.3",
+            "python-dotenv": "^1.0.0",
+            "pydantic": "^2.9.0",
+            "pydantic-settings": "^2.0.0",
+            "pydantic-extra-types": "^2.1.0"
+        }
+    },
+    "environmentVariables": {
+        "required": {
+            "SURREALDB_URL": "file:data/surrealdb/database.db",
+            "SURREALDB_USER": "root",
+            "SURREALDB_PASS": "root",
+            "SURREALDB_NS": "Harmonize",
+            "SURREALDB_DB": "GTD"
+        }
+    },
+    "storage": {
+        "types": {
+            "file": {
+                "url": "file://database/data/surreal.db",
+                "usage": "Production with persistence",
+                "setup": {
+                    "server": "Must run as server with file storage",
+                    "client": "Connect via WebSocket",
+                    "command": "surreal start --log debug --user root --pass root file://database/data/surreal.db"
+                },
+                "benefits": [
+                    "Persistent data storage",
+                    "File-based backups",
+                    "Data survives restarts"
+                ]
+            },
+            "memory": {
+                "url": "memory",
+                "usage": "Development and testing",
+                "setup": {
+                    "server": "Run in memory mode",
+                    "client": "Connect via WebSocket",
+                    "command": "surreal start --log debug --user root --pass root memory"
+                }
+            }
+        },
+        "clientConnection": {
+            "type": "WebSocket",
+            "url": "ws://localhost:8000",
+            "requirements": [
+                "Server must be running",
+                "Python SDK uses WebSocket",
+                "File storage managed by server"
+            ]
+        }
+    },
+    "clientSDK": {
+        "python": {
+            "version": "^0.3.2",
+            "connection": {
+                "websocket": {
+                    "url": "ws://127.0.0.1:8000/rpc",
+                    "requirements": [
+                        "RPC endpoint required for Python SDK",
+                        "WebSocket connection mandatory",
+                        "Authentication before operations"
+                    ]
+                },
+                "authentication": {
+                    "signin": "await client.signin({'user': 'root', 'pass': 'root'})",
+                    "namespace": "await client.use('namespace', 'database')"
+                }
+            }
+        }
+    },
+    "versionCompatibility": {
+        "server": {
+            "minimum": "2.0.3",
+            "recommended": "2.0.3",
+            "features": [
+                "WebSocket RPC support",
+                "File-based persistence",
+                "Query improvements"
+            ]
+        },
+        "pythonSDK": {
+            "minimum": "0.3.2",
+            "recommended": "0.3.2",
+            "requirements": [
+                "Async/await support",
+                "WebSocket client",
+                "JSON RPC protocol"
+            ]
+        }
+    }
+}
